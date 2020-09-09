@@ -99,12 +99,12 @@ class UGATIT(object) :
 
         self.trainA = ImageFolder('/kaggle/input/ffhq-face-data-set/thumbnails128x128/', train_transform) # ImageFolder(os.path.join('dataset', self.dataset, 'trainA'), train_transform)
         self.trainB = ImageFolder('/kaggle/input/animefacedataset/images/', train_transform) # ImageFolder(os.path.join('dataset', self.dataset, 'trainB'), train_transform)
-        self.testA = ImageFolder(os.path.join('dataset', self.dataset, 'testA'), test_transform)
-        self.testB = ImageFolder(os.path.join('dataset', self.dataset, 'testB'), test_transform)
+        #self.testA = ImageFolder(os.path.join('dataset', self.dataset, 'testA'), test_transform)
+        #self.testB = ImageFolder(os.path.join('dataset', self.dataset, 'testB'), test_transform)
         self.trainA_loader = DataLoader(self.trainA, batch_size=self.batch_size, shuffle=True)
         self.trainB_loader = DataLoader(self.trainB, batch_size=self.batch_size, shuffle=True)
-        self.testA_loader = DataLoader(self.testA, batch_size=1, shuffle=False)
-        self.testB_loader = DataLoader(self.testB, batch_size=1, shuffle=False)
+        #self.testA_loader = DataLoader(self.testA, batch_size=1, shuffle=False)
+        #self.testB_loader = DataLoader(self.testB, batch_size=1, shuffle=False)
 
         """ Define Generator, Discriminator """
         self.genA2B = ResnetGenerator(input_nc=3, output_nc=3, ngf=self.ch, n_blocks=self.n_res, img_size=self.img_size, light=self.light).to(self.device)
@@ -244,7 +244,7 @@ class UGATIT(object) :
             print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
             if step % self.print_freq == 0:
                 train_sample_num = 5
-                test_sample_num = 5
+                test_sample_num = 0
                 A2B = np.zeros((self.img_size * 7, 0, 3))
                 B2A = np.zeros((self.img_size * 7, 0, 3))
 
