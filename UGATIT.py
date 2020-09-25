@@ -7,7 +7,6 @@ from utils import *
 from glob import glob
 import wandb
 
-wandb.init()
 
 class UGATIT(object) :
     def __init__(self, args):
@@ -131,6 +130,7 @@ class UGATIT(object) :
 
     def train(self):
         self.genA2B.train(), self.genB2A.train(), self.disGA.train(), self.disGB.train(), self.disLA.train(), self.disLB.train()
+        wandb.init()
 
         start_iter = 1
         if self.resume:
