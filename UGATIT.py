@@ -5,6 +5,9 @@ from torch.utils.data import DataLoader
 from networks import *
 from utils import *
 from glob import glob
+import wandb
+
+wandb.init()
 
 class UGATIT(object) :
     def __init__(self, args):
@@ -247,6 +250,11 @@ class UGATIT(object) :
                 test_sample_num = 0
                 A2B = np.zeros((self.img_size * 7, 0, 3))
                 B2A = np.zeros((self.img_size * 7, 0, 3))
+                
+                wandb.log({
+                "Discriminator_loss": Discriminator_loss.item(),
+                    "Generator_loss": Generator_loss.item()
+                })
 
                 self.genA2B.eval(), self.genB2A.eval(), self.disGA.eval(), self.disGB.eval(), self.disLA.eval(), self.disLB.eval()
                 for _ in range(train_sample_num):
@@ -330,6 +338,9 @@ class UGATIT(object) :
                 cv2.imwrite(os.path.join(self.result_dir, self.dataset, 'img', 'A2B_%07d.png' % step), A2B * 255.0)
                 cv2.imwrite(os.path.join(self.result_dir, self.dataset, 'img', 'B2A_%07d.png' % step), B2A * 255.0)
                 self.genA2B.train(), self.genB2A.train(), self.disGA.train(), self.disGB.train(), self.disLA.train(), self.disLB.train()
+                
+                example_images = [wandb.Image(A2B, caption="A2B"), wandb.Image(B2A, caption="B2A")]
+                wandb.log({"Example images: ": example_images})
 
             if step % self.save_freq == 0:
                 self.save(os.path.join(self.result_dir, self.dataset, 'model'), step)
