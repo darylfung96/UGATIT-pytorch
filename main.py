@@ -1,7 +1,5 @@
 from UGATIT import UGATIT
 import argparse
-import torch_xla
-import torch_xla.core.xla_model as xm
 from utils import *
 
 """parsing and configuration"""
