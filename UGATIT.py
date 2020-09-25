@@ -243,7 +243,7 @@ class UGATIT(object) :
             # clip parameter of AdaILN and ILN, applied after optimizer step
             self.genA2B.apply(self.Rho_clipper)
             self.genB2A.apply(self.Rho_clipper)
-
+            wandb.log({ "Discriminator_loss": Discriminator_loss.item(), "Generator_loss": Generator_loss.item()})
             print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
             if step % self.print_freq == 0:
                 train_sample_num = 5
@@ -251,10 +251,7 @@ class UGATIT(object) :
                 A2B = np.zeros((self.img_size * 7, 0, 3))
                 B2A = np.zeros((self.img_size * 7, 0, 3))
                 
-                wandb.log({
-                "Discriminator_loss": Discriminator_loss.item(),
-                    "Generator_loss": Generator_loss.item()
-                })
+                
 
                 self.genA2B.eval(), self.genB2A.eval(), self.disGA.eval(), self.disGB.eval(), self.disLA.eval(), self.disLB.eval()
                 for _ in range(train_sample_num):
