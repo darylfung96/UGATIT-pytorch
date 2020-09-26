@@ -243,7 +243,7 @@ class UGATIT(object) :
             # clip parameter of AdaILN and ILN, applied after optimizer step
             self.genA2B.apply(self.Rho_clipper)
             self.genB2A.apply(self.Rho_clipper)
-            #wandb.log({ "Discriminator_loss": Discriminator_loss.item(), "Generator_loss": Generator_loss.item()})
+            wandb.log({ "Discriminator_loss": Discriminator_loss, "Generator_loss": Generator_loss})
             print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
             if step % self.print_freq == 0:
                 train_sample_num = 5
@@ -336,8 +336,8 @@ class UGATIT(object) :
                 cv2.imwrite(os.path.join(self.result_dir, self.dataset, 'img', 'B2A_%07d.png' % step), B2A * 255.0)
                 self.genA2B.train(), self.genB2A.train(), self.disGA.train(), self.disGB.train(), self.disLA.train(), self.disLB.train()
                 
-                #example_images = [wandb.Image(A2B, caption="A2B"), wandb.Image(B2A, caption="B2A")]
-                #wandb.log({"Example images: ": example_images})
+                example_images = [wandb.Image(A2B, caption="A2B"), wandb.Image(B2A, caption="B2A")]
+                wandb.log({"Example images: ": example_images})
 
             if step % self.save_freq == 0:
                 self.save(os.path.join(self.result_dir, self.dataset, 'model'), step)
